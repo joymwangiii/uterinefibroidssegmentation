@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MED-EXPERTS - PATIENT'S FORM</title>
+    <link rel="stylesheet" href="./style1.css">
+    <link rel="stylesheet" type="text/css" href="slide navbar style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container"> <a class="navbar-brand navbar-logo" href="landing.html"> <img src="images/logo.png" alt="logo" class="logo-1"> </a>
+  </div>
+</nav>
+    <div class="main">
+        <input type="checkbox" id="chk" aria-hidden="true">
+
+        <div class="signup">
+            <form id = patientForm>
+                <label for="chk" aria-hidden="true"> Patient's Details</label>
+                <input type="text" id="PatientD" name="txt" placeholder="PatientID" required="">
+                <input type="text" id="FirstName" name="FirstName" placeholder="First Name" required="">
+                <input type="text" id="LastName" name="LastName" placeholder="Last Name" required="">
+                <input type="date" id="DOB" name="DOB" placeholder="D.O.B"required="">
+                <button id="submit">Submit Details</button>
+                <a href="http://127.0.0.1:5000/submit"><button type="button"> Proceed to Segment</button>
+                </a>
+            </form>
+        </div>
+    </div>
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBAbP8VW0H1DbvSj1QhBjHImQRrCw1x3Fk",
+        authDomain: "is-project-html.firebaseapp.com",
+        projectId: "is-project-html",
+        storageBucket: "is-project-html.appspot.com",
+        messagingSenderId: "702143544185",
+        appId: "1:702143544185:web:b2ba48d75c45d6c45d8da8",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Wait for the DOM to fully load
+    document.addEventListener("DOMContentLoaded", function () {
+        const submitButton = document.getElementById("submit");
+        const patientForm = document.getElementById("patientForm");
+
+
+        submitButton.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Get form data
+            const patientData = {
+                PatientID: document.getElementById("PatientD").value,
+                FirstName: document.getElementById("FirstName").value,
+                LastName: document.getElementById("LastName").value,
+                DOB: document.getElementById("DOB").value,
+            };
+
+            // Push data to Firebase
+            const patientsRef = ref(database, "patients");
+            push(patientsRef, patientData)
+                .then(() => {
+                    alert("Data stored successfully!");
+                    window.location.href = "http://127.0.0.1:5000";
+                    // Redirect or perform other actions after successful data storage
+                })
+                .catch((error) => {
+                    alert("Error storing data: " + error.message);
+                });
+        });
+    });
+</script>
+
+</body>
+</html>
